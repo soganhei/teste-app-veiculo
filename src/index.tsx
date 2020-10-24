@@ -1,12 +1,55 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import {GlobalStyle} from './styles'
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,   
+} from 'react-router-dom';
+
+import SaidasVeiculo from './app/SaidasVeiculo/SaidasVeiculo'
+import SaidasVeiculoFrom from './app/SaidasVeiculo/SaidasVeiculoForm'
+
+import Motoristas from './app/Motorista/Motorista'
+import MotoristasForm from './app/Motorista/MotoristaForm'
+
+import Veiculos from './app/Veiculo/Veiculo'
+import VeiculosForm from './app/Veiculo/VeiculoForm'
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Router>
+        <App />
+        <Switch>   
+            
+            <Route exact path="/saidas">
+              <SaidasVeiculoFrom />
+            </Route>
+            <Route exact path="/motoristas">
+              <Motoristas />           
+            </Route>
+            <Route exact path="/motoristas/form">
+                <MotoristasForm />
+            </Route> 
+            <Route exact path="/motoristas/form/:id">
+                <MotoristasForm />
+            </Route>
+            <Route exact path="/veiculos">
+              <Veiculos />
+            </Route>
+            <Route exact path="/veiculos/form">
+              <VeiculosForm />
+            </Route>      
+            <Route path="/">
+              <SaidasVeiculo />
+            </Route>
+          </Switch>
+    </Router>
+    <GlobalStyle />
   </React.StrictMode>,
   document.getElementById('root')
 );
