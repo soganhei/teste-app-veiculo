@@ -22,6 +22,7 @@ export const GlobalStyle =  createGlobalStyle`
     :root{
         --corPrimaria:#07C2E8;
         --corSecundaria: #0D91A8; 
+        --corError: #FF241C; 
     }
 
     .table{
@@ -47,8 +48,7 @@ export const GlobalStyle =  createGlobalStyle`
 
     .table tbody tr td{
         padding: 9px; 
-        font-weight:300; 
-        cursor: pointer;
+        font-weight:300;        
         text-align: center; 
         border-bottom: 1px solid #B6FFAB; 
     }
@@ -63,8 +63,7 @@ export const GlobalStyle =  createGlobalStyle`
         font-weight: 400; 
         border-radius: 9px; 
         text-decoration:none; 
-        display:inline-block; 
-        margin: 30px 0 10px 0; 
+        display:inline-block;          
         color: var(--corPrimaria);
         border:1px solid var(--corPrimaria);
         
@@ -138,6 +137,39 @@ export const Grid = styled.div`
 export const Table = styled.div`
     margin-top: 20px; 
 `
+export const TableIcons = styled.div`
+
+    display:flex; 
+    flex-direction: row;      
+    justify-content: center; 
+
+
+    > span{
+        padding: 10px; 
+        font-size:200;  
+        cursor: pointer; 
+        margin-right: 9px; 
+        border-radius: 50%; 
+        color: var(--corPrimaria); 
+        border:1px solid var(--corPrimaria);
+
+        &:hover{
+            color: white; 
+            border-color: var(--corSecundaria);
+            background-color: var(--corSecundaria); 
+        }
+        
+    }
+    > span.trash{
+         color: var(--corError); 
+         border-color: var(--corError);
+         &:hover{
+             color: white; 
+             background-color: var(--corError)
+         }
+    }
+`
+
 
 export const Form = styled.form`        
     display:flex; 
@@ -168,11 +200,7 @@ export const Button = styled.button`
        
     }  
 `
-
-export const InputIcon = styled.div`
-     
-`
-export const Icon = styled.div``
+ 
 export const InputText = styled.div`
     display:flex; 
     flex-direction: column; 
@@ -219,7 +247,7 @@ export const Buttons = styled.div`
 export const TextError = styled.span`
     display:flex; 
     margin-top: 9px; 
-    color: #FF241C; 
     font-weight: 400;
+    color: var(--corError); 
 
 `

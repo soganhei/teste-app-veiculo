@@ -1,9 +1,12 @@
-//import { Label } from '@material-ui/icons';
 import React from 'react';
-
 import {Link} from 'react-router-dom';
 
+import { faUserAlt, faCarAlt, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+
 import {Menu} from './styles'
+
+
 
 
 function App() {
@@ -13,13 +16,13 @@ function App() {
         <Menu>
           <ul>
               <li>
-                <Link to="/">Saídas</Link>
+                <Link to="/"> <FontAwesomeIcon icon={faCalendarAlt} /> Saídas</Link>
               </li>
               <li>
-                <Link to="/motoristas">Motoristas</Link>
+                <Link to="/motoristas"><FontAwesomeIcon icon={faUserAlt} /> Motoristas</Link>
               </li>
               <li>
-                <Link to="/veiculos">Veículos</Link>
+                <Link to="/veiculos"><FontAwesomeIcon icon={faCarAlt} /> Veículos</Link>
               </li>
             </ul>
         </Menu> 

@@ -26,7 +26,10 @@ ReactDOM.render(
         <App />
         <Switch>   
             
-            <Route exact path="/saidas">
+            <Route exact path="/saidas/form">
+              <SaidasVeiculoFrom />
+            </Route>
+            <Route exact path="/saidas/form/:id">
               <SaidasVeiculoFrom />
             </Route>
             <Route exact path="/motoristas">
@@ -42,6 +45,9 @@ ReactDOM.render(
               <Veiculos />
             </Route>
             <Route exact path="/veiculos/form">
+              <VeiculosForm />
+            </Route>  
+            <Route exact path="/veiculos/form/:id">
               <VeiculosForm />
             </Route>      
             <Route path="/">

@@ -1,6 +1,9 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
+import {useHistory,useParams} from 'react-router-dom';
+
 import { useForm } from 'react-hook-form';
-import {useHistory} from 'react-router-dom';
+
+
 
 import {    
   Container,
@@ -14,17 +17,63 @@ import {
   Buttons, 
 } from '../../styles'
 
-import {Veiculo} from '../../estrutura'
+import http from '../../http'
 
+import {IVeiculo} from '../../estrutura'
+
+interface IParams {
+  id:Number | any, 
+}
 
 function VeiculoForm() {
 
   const router = useHistory()
+  const urlParams = useParams<IParams>()
 
-  const { register, handleSubmit, errors } = useForm<Veiculo>();
+  const { register, handleSubmit,setValue,  errors } = useForm<IVeiculo>();
 
-  const onSubmit = async (payload:Veiculo) => {
-    console.log(payload.cor);
+  const [idVeiculo,setIdVeiculo] = useState<Number | undefined>(undefined)
+
+  useEffect(()=>{
+         
+    if(urlParams.id != undefined){
+      
+          const findbyid = async () =>{
+              
+                const response = await http.Veiculo.FindbyID(urlParams.id)
+                const data: IVeiculo = await response.json()
+                
+                setIdVeiculo(data.id)
+                setValue("placa",data.placa)
+                setValue("marca",data.marca)
+                setValue("cor",data.cor)                 
+
+          }
+          findbyid()
+    }
+},[])
+
+  const onSubmit = async (payload:IVeiculo) => {
+    
+    if(idVeiculo != undefined){
+        payload.id = idVeiculo
+    }
+    
+    try {
+
+      const response = await http.Veiculo.Save(payload)
+      const item  = await response.json()
+
+      if(item.id){
+          alert("Salvo com sucesso")
+          voltarPagina()
+      }
+      
+    } catch (error) {
+      const err = await error.json()
+      alert(err.message)
+    }
+
   };
 
   const voltarPagina = ()=>{
@@ -49,7 +98,7 @@ function VeiculoForm() {
                         </InputText> 
                         <InputText>
                             <Label>Marca</Label>
-                            <Input name="marca" autoComplete="off" ref={register({required:true})} />
+                            <Input name="marca" ref={register({required:true})} />
                             {errors.marca && <TextError>Marca obrigatória</TextError>}
                         </InputText>  
                         <Buttons>

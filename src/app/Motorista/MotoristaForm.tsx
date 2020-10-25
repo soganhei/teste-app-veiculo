@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {useHistory} from 'react-router-dom';
+import {useHistory,useParams} from 'react-router-dom';
+
+
 
 import {    
   Container,
@@ -14,16 +16,63 @@ import {
   Buttons, 
 } from '../../styles'
 
-import {Motorista} from '../../estrutura'
+import http from '../../http'
+
+import {IMotorista} from '../../estrutura'
+
+interface IParams {
+  id:Number | any, 
+}
 
 function MotoristaForm() {
 
   const router = useHistory()
+  const urlParams = useParams<IParams>()
 
-  const { register, handleSubmit, errors } = useForm<Motorista>();
+  const { register, handleSubmit,setValue, errors } = useForm<IMotorista>();
+  
+  const [idMotorista,setIdMotorista] = useState<Number | undefined>(undefined)
 
-  const onSubmit = async (payload:Motorista) => {
-    console.log(payload.nome);
+  useEffect(()=>{
+         
+          if(urlParams.id != undefined){
+            
+                const findbyid = async () =>{
+                    
+                      const response = await http.Motorista.FindbyID(urlParams.id)
+                      const data: IMotorista = await response.json()
+                      
+                      setIdMotorista(data.id)
+                      setValue("nome",data.nome)
+                       
+
+                }
+                findbyid()
+
+          }
+  },[])
+
+  const onSubmit = async (payload:IMotorista) => {
+
+            if(idMotorista != undefined){
+                payload.id = idMotorista
+            }
+            
+            try {
+
+              const response = await http.Motorista.Save(payload)
+              const item  = await response.json()
+
+              if(item.id){
+                  alert("Salvo com sucesso")
+                  voltarPagina()
+              }
+
+            } catch (error) {
+                  const err = await error.json()
+                  alert(err.message)
+            }
+
   };
 
   const voltarPagina = ()=>{
@@ -38,13 +87,13 @@ function MotoristaForm() {
                    <Form onSubmit={handleSubmit(onSubmit)}>                     
                         <InputText>
                             <Label>Nome</Label>
-                            <Input name="nome" autoComplete="off" ref={register({required:true})} />
+                            <Input name="nome" autoComplete="off" ref={register({required:true, minLength:3})} />
                             {errors.nome && <TextError>Nome obrigatório</TextError>}
                         </InputText>  
                         <Buttons>
                             <Button type="button" onClick={voltarPagina}  className="btn prev">Voltar</Button>
                             <Button type="submit"  className="btn">Salvar</Button>
-                        </Buttons> 
+                        </Buttons>                         
                    </Form>                   
              </Grid>
         </Container>

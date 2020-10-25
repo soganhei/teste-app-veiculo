@@ -1,6 +1,14 @@
 import React,{useState,useEffect} from 'react';
+import {useHistory,useParams} from 'react-router-dom';
+
 import { useForm } from 'react-hook-form';
-import {useHistory} from 'react-router-dom';
+
+
+import DatePicker,{registerLocale} from 'react-datepicker';
+import ptBr from 'date-fns/locale/pt-BR';
+import 'react-datepicker/dist/react-datepicker.css';
+
+ 
 
 import Autocomplete from 'react-autocomplete'
 
@@ -16,29 +24,129 @@ import {
   Buttons, 
 } from '../../styles'
 
-import {FormSaidaVeiculo,Motorista,Veiculo} from '../../estrutura'
+import http from '../../http'
+
+import {IFormSaidaVeiculo,IMotorista,IVeiculo} from '../../estrutura'
+
+interface IParams {
+  id:Number | any, 
+}
 
 function SaidasVeiculoForm() {
-
+  
   const router = useHistory()
+  const urlParams = useParams<IParams>()
+  
+  registerLocale("ptBR",ptBr)
 
-  const { register, handleSubmit, errors } = useForm<FormSaidaVeiculo>();
+  const { register, handleSubmit, setValue,  errors } = useForm<IFormSaidaVeiculo>();
+  const [data,setData] = useState<IFormSaidaVeiculo>({})
+  
+  const [entradaVeiculo, setEntradaVeiculo] = useState(false)
+  const [dataEntrada, setDataEntrada] = useState(new Date())
 
-  const [motoristas,setMotoristas] = useState<Motorista[]>([])
-  const [nomeMotorista,setNomeMotorista] = useState("")
-
-  const [veiculos,setVeiculos] = useState<Veiculo[]>([])
-  const [nomeVeiculo,setNomeVeiculo] = useState("")
- 
+  const [motoristas,setMotoristas] = useState<IMotorista[]>([])
+  const [veiculos,setVeiculos] = useState<IVeiculo[]>([])
   
 
-  const onSubmit = async (payload:FormSaidaVeiculo) => {
-    console.log(payload.idMotorista);
+  const [idSaida,setIdSaida] = useState<Number | undefined>(undefined)
+ 
+  useEffect(()=>{
+
+        const findMotoristas= async ()=>{
+
+              const response = await http.Motorista.Find({})
+              const items: IMotorista[] = await response.json()
+              setMotoristas(items)
+
+         }
+         findMotoristas()
+
+        const findVeiculos= async ()=>{
+
+          const response = await http.Veiculo.Find({})
+          const data: IVeiculo[] = await response.json()
+
+          const items  = data.map((item)=>{
+
+            item.label = `${item.placa} | ${item.marca} | ${item.cor}`
+            return item 
+
+          })
+          setVeiculos(items)
+
+        }
+        findVeiculos()
+
+  },[])
+
+  useEffect(()=>{
+
+    if(urlParams.id != undefined){
+      
+      const findbyid = async () =>{
+          
+            const response = await http.Saida.FindbyID(urlParams.id)
+            const data: IFormSaidaVeiculo = await response.json()
+            
+            setIdSaida(data.id)
+            setEntradaVeiculo(true)
+
+            const {veiculo} = data
+
+            if(data.dataEntrada == undefined){
+               setDataEntrada(new Date())
+            }
+           
+            setData({
+              ...data, 
+              veiculo:{
+                label: `${veiculo?.placa} | ${veiculo?.marca} | ${veiculo?.cor}`, 
+                id: veiculo?.id, 
+              }
+            })               
+
+      }
+      findbyid()
+}
+
+  },[])
+
+  const onSubmit = async (payload:IFormSaidaVeiculo) => {
+    
+    payload.idMotorista = data.motorista?.id
+    payload.idVeiculo = data.veiculo?.id
+
+     if(idSaida != undefined){
+      payload.id = idSaida
+      payload.dataEntrada= dataEntrada
+    }
+
+    console.log(payload)
+
+    try {
+      
+      const response = await http.Saida.Save(payload)
+      const item  = await response.json()
+
+      if(item.id){
+          alert("Salvo com sucesso")
+          voltarPagina()
+      }
+    } catch (error) {
+         console.log(error)
+    }
+
   };
 
   const voltarPagina = ()=>{
      router.push("/")
   }
+
+  const handlerDataEntrada = (date:Date) =>{
+       setDataEntrada(date)
+  }
+  
 
   return (
      <div>
@@ -51,37 +159,40 @@ function SaidasVeiculoForm() {
                             <Autocomplete            
                              inputProps={{className:"input-autocomplete", placeholder:"Buscar motoristas"}}                 
                              items={motoristas}
-                             value={nomeMotorista}                             
-                             getItemValue={item => item.label}
-                             onChange={(e)=>{
+                             value={data.motorista?.nome}                             
+                             getItemValue={item => item.nome }
+                             onChange={ async (e)=>{
                                  if(e.target.value !== undefined){
-                                     setNomeMotorista(e.target.value)                                 
-                                     console.log(nomeMotorista)
+                                  setData({...data,motorista:{nome:e.target.value}})
                                  }
+                             }}
+                             onSelect={(value,item)=>{
+                                setData({...data,motorista:{id:item.id, nome: value}})                               
                              }}
                              renderItem={(item, highlighted) =>
                                 <div
                                   key={item.id}
                                   style={{ backgroundColor: highlighted ? '#eee' : 'transparent'}}
                                 >
-                                  {item.label}
+                                  {item.nome}
                                 </div>
                               }
-                            />
-                            {errors.motorista && <TextError>Nome obrigatório</TextError>}
+                            />                            
                         </InputText>  
                         <InputText>
                             <Label>Veículos</Label>
                             <Autocomplete            
                              inputProps={{className:"input-autocomplete", placeholder:"Buscar veículos"}}                   
                              items={veiculos}
-                             value={nomeVeiculo}                             
+                             value={data.veiculo?.label}                             
                              getItemValue={item => item.label}
                              onChange={(e)=>{
                                  if(e.target.value !== undefined){
-                                     setNomeVeiculo(e.target.value)                                 
-                                     console.log(nomeVeiculo)
+                                    setData({...data,veiculo:{label:e.target.value}})                                      
                                  }
+                             }}
+                             onSelect={(value,item)=>{
+                                setData({...data,veiculo:{id:item.id, label: value}})                                
                              }}
                              renderItem={(item, highlighted) =>
                                 <div
@@ -91,9 +202,25 @@ function SaidasVeiculoForm() {
                                   {item.label}
                                 </div>
                               }
-                            />
-                            {errors.motorista && <TextError>Nome obrigatório</TextError>}
+                            />                            
                         </InputText>  
+                        {entradaVeiculo && (
+                          <div>
+                              <InputText>
+                                <Label>Data entrada</Label>
+                                <DatePicker locale="ptBR" dateFormat="dd/MM/yyyy" selected={dataEntrada} onChange={ handlerDataEntrada } className="input-autocomplete" />                             
+                            </InputText>                             
+                          </div>
+                        )} 
+
+                        {!entradaVeiculo && (
+                          <InputText>
+                            <Label>Motivo Saída</Label>
+                            <Input name="motivoSaida" autoComplete="off" ref={register({required:true})} />
+                            {errors.motivoSaida && <TextError>Informe o motivo da saída</TextError>}                             
+                          </InputText>
+                        )}                        
+                         
                         <Buttons>
                             <Button type="button" onClick={voltarPagina}  className="btn prev">Voltar</Button>
                             <Button type="submit"  className="btn">Salvar</Button>

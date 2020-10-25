@@ -3,11 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/react-fontawesome": "^0.1.11",
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "http-status-codes": "^2.1.4",
     "react": "^17.0.1",
     "react-autocomplete": "^1.8.1",
+    "react-datepicker": "^3.3.0",
     "react-dom": "^17.0.1",
     "react-hook-form": "^6.9.6",
     "react-router-dom": "^5.2.0",
@@ -41,12 +46,13 @@
     ]
   },
   "devDependencies": {
-    "@types/react-autocomplete": "^1.8.5",
-    "@types/react-dom": "^16.9.8",
-    "@types/react-router-dom": "^5.1.6",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.19.1",
     "@types/react": "^16.9.53",
+    "@types/react-autocomplete": "^1.8.5",
+    "@types/react-datepicker": "^3.1.1",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-router-dom": "^5.1.6",
     "@types/styled-components": "^5.1.4"
   }
 }
