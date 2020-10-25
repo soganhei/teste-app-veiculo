@@ -106,6 +106,7 @@ export const Menu = styled.div`
 
     > ul{
         margin-top: 60px; 
+        padding-left: 30px; 
     }
 
     > ul li{
@@ -116,6 +117,11 @@ export const Menu = styled.div`
     > ul li a{
        color:white; 
        text-decoration:none; 
+
+       &:hover{
+           color:#14FC5F; 
+           
+       }
 
     } 
    

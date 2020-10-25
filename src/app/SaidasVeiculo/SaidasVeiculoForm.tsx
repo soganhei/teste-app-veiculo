@@ -3,13 +3,12 @@ import {useHistory,useParams} from 'react-router-dom';
 
 import { useForm } from 'react-hook-form';
 
+import moment from 'moment'
 
 import DatePicker,{registerLocale} from 'react-datepicker';
 import ptBr from 'date-fns/locale/pt-BR';
 import 'react-datepicker/dist/react-datepicker.css';
-
  
-
 import Autocomplete from 'react-autocomplete'
 
 import {    
@@ -28,6 +27,8 @@ import http from '../../http'
 
 import {IFormSaidaVeiculo,IMotorista,IVeiculo} from '../../estrutura'
 
+import {FormatDate} from '../../lib'
+
 interface IParams {
   id:Number | any, 
 }
@@ -39,7 +40,7 @@ function SaidasVeiculoForm() {
   
   registerLocale("ptBR",ptBr)
 
-  const { register, handleSubmit, setValue,  errors } = useForm<IFormSaidaVeiculo>();
+  const { register, handleSubmit,   errors } = useForm<IFormSaidaVeiculo>();
   const [data,setData] = useState<IFormSaidaVeiculo>({})
   
   const [entradaVeiculo, setEntradaVeiculo] = useState(false)
@@ -93,18 +94,24 @@ function SaidasVeiculoForm() {
             setEntradaVeiculo(true)
 
             const {veiculo} = data
-
-            if(data.dataEntrada == undefined){
-               setDataEntrada(new Date())
-            }
-           
+ 
             setData({
               ...data, 
               veiculo:{
                 label: `${veiculo?.placa} | ${veiculo?.marca} | ${veiculo?.cor}`, 
                 id: veiculo?.id, 
               }
-            })               
+            })    
+
+            if(data.dataEntrada == undefined){
+              setDataEntrada(new Date())              
+           }else{
+
+              const d = moment(data.dataEntrada.toString()).format()
+              setDataEntrada(new Date(d))  
+
+           }
+          
 
       }
       findbyid()
@@ -119,7 +126,7 @@ function SaidasVeiculoForm() {
 
      if(idSaida != undefined){
       payload.id = idSaida
-      payload.dataEntrada= dataEntrada
+      payload.dataEntrada = FormatDate(dataEntrada)
     }
 
     console.log(payload)
@@ -134,7 +141,10 @@ function SaidasVeiculoForm() {
           voltarPagina()
       }
     } catch (error) {
-         console.log(error)
+
+      const err = await error.json()
+      alert(err.message)
+
     }
 
   };

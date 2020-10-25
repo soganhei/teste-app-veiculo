@@ -33,9 +33,20 @@ export interface IFormSaidaVeiculo{
     id?:Number, 
     idMotorista?: Number, 
     idVeiculo?:  Number,    
-    dataEntrada?: Date, 
+    dataEntrada?: String, 
     motivoSaida?: String,     
     motorista?: IMotorista,
     veiculo?: IVeiculo, 
 
+}
+
+export interface ILogs{
+    id?:Number, 
+    key?:String, 
+    method?:String, 
+    error?: Boolean, 
+    errorMessage?: String, 
+    payload?: any, 
+    dataCriacao?: Date, 
+    table:String, 
 }

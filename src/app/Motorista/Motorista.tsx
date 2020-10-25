@@ -8,7 +8,7 @@ import {IMotorista} from '../../estrutura'
 
  
 
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCarAlt, faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import {    
@@ -48,11 +48,19 @@ function Motoristas() {
       }
       
       if(idMotorista != undefined){
-        const response = await http.Motorista.Delete(idMotorista)
         
-        if(response.status == StatusCodes.NO_CONTENT){             
-          find({})
-        }
+           try {
+
+              const {status} = await http.Motorista.Delete(idMotorista)
+          
+              if(status == StatusCodes.NO_CONTENT){             
+                find({})
+              }
+
+           } catch (error) {
+             const err = await error.json()
+             alert(err.message)
+           }
 
       }
   }
@@ -63,7 +71,7 @@ function Motoristas() {
              <Grid>
                <h2>Motoristas</h2>                   
                    <div>
-                      <Link to="/motoristas/form" className="ver-form">Novo Motorista</Link>
+                      <Link to="/motoristas/form" className="ver-form"><FontAwesomeIcon icon={faPlus} /> Novo Motorista</Link>
                    </div>
                    {items.length > 0 && (
                      <Table>

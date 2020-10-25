@@ -4,7 +4,7 @@ import {Link, useHistory} from 'react-router-dom'
 import {StatusCodes} from 'http-status-codes'
 
  
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 import {    
@@ -51,11 +51,12 @@ function Veiculos() {
 
           try {
 
-            const response = await http.Veiculo.Delete(idVeiculo)
+            const {status} = await http.Veiculo.Delete(idVeiculo)
         
-            if(response.status == StatusCodes.NO_CONTENT){             
+            if(status == StatusCodes.NO_CONTENT){             
                 find({})
             }
+
           } catch (error) {
               const err = await error.json()
               alert(err.message)
@@ -70,7 +71,7 @@ function Veiculos() {
              <Grid>
                <h2>Veículos</h2>                    
                    <div>
-                      <Link to="/veiculos/form" className="ver-form">Novo Veículo</Link>
+                      <Link to="/veiculos/form" className="ver-form"><FontAwesomeIcon icon={faPlus} /> Novo Veículo</Link>
                    </div>
                    {items.length > 0 && (
                       <Table>

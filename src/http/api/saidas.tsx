@@ -1,8 +1,10 @@
-import {IFormSaidaVeiculo} from '../estrutura';
+import api,{response} from './config'
 
+import {IMotorista,IVeiculo,IFormSaidaVeiculo} from '../../estrutura';
+ 
 
-export default (api:String) => {
-    return {
+export default  {
+     
         Save: async (payload:IFormSaidaVeiculo)=>{
 
             let method = "POST"
@@ -20,17 +22,19 @@ export default (api:String) => {
                     "Accept":"application/json", 
                 }, 
                 body: JSON.stringify(payload) 
-            })
+            }).then(response)
     
         },
-        Find: async (params:Object)=>{
+        Find: async (params:any)=>{
+
+            const url = `${api}/saidas?`+ new URLSearchParams(params)
     
-            return fetch(`${api}/saidas`,{                 
+            return fetch(url,{                 
                 headers:{                   
                     "Content-Type":"application/json", 
                     "Accept":"application/json", 
                 },                  
-            })
+            }).then(response)
     
         },
         FindbyID: async (idSaida:Number)=>{
@@ -40,7 +44,7 @@ export default (api:String) => {
                     "Content-Type":"application/json", 
                     "Accept":"application/json", 
                 },                  
-            })
+            }).then(response)
     
         }, 
         Delete: async (idSaida:Number)=>{
@@ -51,8 +55,8 @@ export default (api:String) => {
                     "Content-Type":"application/json", 
                     "Accept":"application/json", 
                 },                  
-            })
+            }).then(response)
     
         }, 
-    }
 }
+ 

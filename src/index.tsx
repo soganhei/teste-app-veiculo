@@ -20,6 +20,8 @@ import MotoristasForm from './app/Motorista/MotoristaForm'
 import Veiculos from './app/Veiculo/Veiculo'
 import VeiculosForm from './app/Veiculo/VeiculoForm'
 
+import Logs from './app/Logs/Logs'
+
 ReactDOM.render(
   <React.StrictMode>
     <Router>
@@ -49,6 +51,9 @@ ReactDOM.render(
             </Route>  
             <Route exact path="/veiculos/form/:id">
               <VeiculosForm />
+            </Route> 
+            <Route exact path="/logs">
+              <Logs />
             </Route>      
             <Route path="/">
               <SaidasVeiculo />

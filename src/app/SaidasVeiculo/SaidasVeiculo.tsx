@@ -3,7 +3,7 @@ import {Link, useHistory} from 'react-router-dom'
 
 import {StatusCodes} from 'http-status-codes'
 
-import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 import {    
@@ -38,6 +38,30 @@ function SaidasVeiculo() {
     useEffect(()=>{
         find({})
     },[])
+
+    const handlerDelete = async (idSaida:Number | undefined) => {
+
+        if(!window.confirm("Deseja excluir?")){
+            return ()=>{}
+        }
+        
+        if(idSaida != undefined){
+  
+            try {
+  
+              const {status} = await http.Saida.Delete(idSaida)
+          
+              if(status == StatusCodes.NO_CONTENT){             
+                  find({})
+              }
+  
+            } catch (error) {
+                const err = await error.json()
+                alert(err.message)
+            }
+  
+        }
+    }
   
   return (
      <div>
@@ -45,7 +69,7 @@ function SaidasVeiculo() {
              <Grid>
                <h2>Saídas de Veículos</h2>                   
                    <div>
-                      <Link to="/saidas/form" className="ver-form">Nova Saída</Link>
+                      <Link to="/saidas/form" className="ver-form"><FontAwesomeIcon icon={faPlus} /> Nova Saída</Link>
                    </div>
                    {items.length > 0 && (
                        <Table>
@@ -76,6 +100,7 @@ function SaidasVeiculo() {
                                             <td>
                                             <TableIcons>
                                                 <span onClick={()=> router.push(`/saidas/form/${item.id}`)}><FontAwesomeIcon icon={faEdit} /></span>                                     
+                                                <span onClick={()=> handlerDelete(item.id)} className="trash"><FontAwesomeIcon icon={faTrash} /></span>
                                             </TableIcons>
                                             </td>
                                         </tr>
