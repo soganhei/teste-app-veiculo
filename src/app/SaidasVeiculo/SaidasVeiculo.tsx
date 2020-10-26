@@ -8,12 +8,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 import {    
     Container,
-    Grid,
-    Button, 
-    Form,    
-    Input,    
-    InputText, 
-    Label, 
+    Grid,    
     Table, 
     TableIcons, 
   } from '../../styles'
@@ -26,7 +21,7 @@ function SaidasVeiculo() {
     const router = useHistory()
 
     const  [items,setItems] = useState<ISaidaVeiculos[]>([])
-    const  [urlParams,setUrlParams] = useState({})
+    
   
     const find = async (params:Object)=>{
   
@@ -45,13 +40,13 @@ function SaidasVeiculo() {
             return ()=>{}
         }
         
-        if(idSaida != undefined){
+        if(idSaida !== undefined){
   
             try {
   
               const {status} = await http.Saida.Delete(idSaida)
           
-              if(status == StatusCodes.NO_CONTENT){             
+              if(status === StatusCodes.NO_CONTENT){             
                   find({})
               }
   

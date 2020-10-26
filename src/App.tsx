@@ -1,13 +1,11 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
+import React from 'react'
+import {Link} from 'react-router-dom'
 
-import { faUserAlt, faCarAlt, faCalendarAlt, faBook } from '@fortawesome/free-solid-svg-icons'
+import { faUserAlt, faCarAlt, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 import {Menu} from './styles'
-
-
-
+ 
 
 function App() {
   return (
@@ -23,10 +21,7 @@ function App() {
               </li>
               <li>
                 <Link to="/veiculos"><FontAwesomeIcon icon={faCarAlt} /> Veículos</Link>
-              </li>
-              <li>
-                <Link to="/logs"><FontAwesomeIcon icon={faBook} /> Logs</Link>
-              </li>
+              </li>               
             </ul>
         </Menu> 
     </div>

@@ -83,7 +83,7 @@ function SaidasVeiculoForm() {
 
   useEffect(()=>{
 
-    if(urlParams.id != undefined){
+    if(urlParams.id !== undefined){
       
       const findbyid = async () =>{
           
@@ -103,7 +103,7 @@ function SaidasVeiculoForm() {
               }
             })    
 
-            if(data.dataEntrada == undefined){
+            if(data.dataEntrada === undefined){
               setDataEntrada(new Date())              
            }else{
 
@@ -117,14 +117,14 @@ function SaidasVeiculoForm() {
       findbyid()
 }
 
-  },[])
+  },[urlParams])
 
   const onSubmit = async (payload:IFormSaidaVeiculo) => {
     
     payload.idMotorista = data.motorista?.id
     payload.idVeiculo = data.veiculo?.id
 
-     if(idSaida != undefined){
+     if(idSaida !== undefined){
       payload.id = idSaida
       payload.dataEntrada = FormatDate(dataEntrada)
     }

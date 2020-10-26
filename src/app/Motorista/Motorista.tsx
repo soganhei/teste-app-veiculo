@@ -8,17 +8,12 @@ import {IMotorista} from '../../estrutura'
 
  
 
-import { faCarAlt, faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {  faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import {    
   Container,
-  Grid,
-  Button, 
-  Form,    
-  Input,    
-  InputText, 
-  Label, 
+  Grid, 
   Table,
   TableIcons
 } from '../../styles'
@@ -28,7 +23,7 @@ function Motoristas() {
   const router = useHistory()
 
   const  [items,setItems] = useState<IMotorista[]>([])
-  const  [urlParams,setUrlParams] = useState({})
+  
 
   const find = async (params:Object)=>{
     
@@ -47,13 +42,13 @@ function Motoristas() {
           return ()=>{}
       }
       
-      if(idMotorista != undefined){
+      if(idMotorista !== undefined){
         
            try {
 
               const {status} = await http.Motorista.Delete(idMotorista)
           
-              if(status == StatusCodes.NO_CONTENT){             
+              if(status === StatusCodes.NO_CONTENT){             
                 find({})
               }
 

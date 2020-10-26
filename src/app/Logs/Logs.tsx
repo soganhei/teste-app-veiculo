@@ -1,32 +1,19 @@
 import React,{useEffect,useState} from 'react';
- 
- 
+  
 import http from '../../http'
 import {ILogs} from '../../estrutura'
 
- 
-import { faBook } from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-
 import {    
   Container,
-  Grid,
-  Button, 
-  Form,    
-  Input,    
-  InputText, 
-  Label, 
-  Table,
-  TableIcons
+  Grid,  
+  Table,  
 } from '../../styles'
 
 function Motoristas() {
 
    
-
   const  [items,setItems] = useState<ILogs[]>([])
-   
-
+  
   const find = async (params:Object)=>{
     
       const response = await http.Log.Find(params)

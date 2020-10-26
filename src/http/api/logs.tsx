@@ -1,6 +1,6 @@
 import api,{response} from './config'
 
-export default {    
+const http = {    
     Find: async (params:any)=>{
 
         const url = `${api}/logs?`+ new URLSearchParams(params)
@@ -25,3 +25,5 @@ export default {
     }, 
     
 }
+
+export default http

@@ -35,7 +35,7 @@ function MotoristaForm() {
 
   useEffect(()=>{
          
-          if(urlParams.id != undefined){
+          if(urlParams.id !== undefined){
             
                 const findbyid = async () =>{
                     
@@ -50,11 +50,11 @@ function MotoristaForm() {
                 findbyid()
 
           }
-  },[])
+  },[urlParams,setValue])
 
   const onSubmit = async (payload:IMotorista) => {
 
-            if(idMotorista != undefined){
+            if(idMotorista !== undefined){
                 payload.id = idMotorista
             }
             

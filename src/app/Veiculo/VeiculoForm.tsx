@@ -36,7 +36,7 @@ function VeiculoForm() {
 
   useEffect(()=>{
          
-    if(urlParams.id != undefined){
+    if(urlParams.id !== undefined){
       
           const findbyid = async () =>{
               
@@ -51,11 +51,11 @@ function VeiculoForm() {
           }
           findbyid()
     }
-},[])
+},[urlParams,setValue])
 
   const onSubmit = async (payload:IVeiculo) => {
     
-    if(idVeiculo != undefined){
+    if(idVeiculo !== undefined){
         payload.id = idVeiculo
     }
     

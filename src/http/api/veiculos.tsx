@@ -2,14 +2,13 @@ import api,{response} from './config'
 
 import {IVeiculo} from '../../estrutura';
 
-
-export default {
+const http = {
     Save: async (payload:IVeiculo)=>{
 
         let method = "POST"
         let url = `${api}/veiculos`
           
-        if(payload.id != undefined){
+        if(payload.id !== undefined){
             method = "PUT"
             url = `${url}/${payload.id}`
         }
@@ -58,3 +57,4 @@ export default {
 
     }, 
 }
+export default http

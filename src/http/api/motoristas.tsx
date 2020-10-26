@@ -1,13 +1,13 @@
 import api,{response} from './config'
 import {IMotorista} from '../../estrutura';
 
-export default {
+const http = {
     Save: async (payload:IMotorista)=>{
 
         let method = "POST"
         let url = `${api}/motoristas`
           
-        if(payload.id != undefined){
+        if(payload.id !== undefined){
             method = "PUT"
             url = `${url}/${payload.id}`
         }
@@ -56,3 +56,5 @@ export default {
 
     }, 
 }
+
+export default http
